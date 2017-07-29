@@ -1,7 +1,7 @@
 ---
 title: hexo的疑难杂症与技巧
 date: 2017-07-29 14:18:48
-tags:
+tags: hexo
 ---
 
 # hexo的疑难杂症与技巧
