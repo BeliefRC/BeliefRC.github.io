@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JavaScript DOM," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="一.Node类型JavaScript中的所有节点类型都继承自Node类型，因此所有节点类型都共享着相同的基本属性和方法。首先了解一个知识点：  文档节点是每个文档的根节点，在HTML页面中，文档元素始终都是&amp;lt;html&amp;gt;元素  总共有12种节点类型，一下是常见节点属性的总结（剩余的大家可以自己总结） 一、nodeName 属性: 节点的名称，是只读的。 元素节点的 nodeName 与标">
+<meta name="keywords" content="JavaScript DOM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="&#39;重读JavaScript高级程序设计总结-DOM&#39;">
+<meta property="og:url" content="http://yoursite.com/2017/08/31/重读JavaScript高级程序设计总结-DOM/index.html">
+<meta property="og:site_name" content="荣川的个人博客">
+<meta property="og:description" content="一.Node类型JavaScript中的所有节点类型都继承自Node类型，因此所有节点类型都共享着相同的基本属性和方法。首先了解一个知识点：  文档节点是每个文档的根节点，在HTML页面中，文档元素始终都是&amp;lt;html&amp;gt;元素  总共有12种节点类型，一下是常见节点属性的总结（剩余的大家可以自己总结） 一、nodeName 属性: 节点的名称，是只读的。 元素节点的 nodeName 与标">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://wx3.sinaimg.cn/mw690/85eda507gy1fj2nkeo37sj20e107e3zt.jpg">
+<meta property="og:updated_time" content="2017-08-31T05:27:45.096Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="&#39;重读JavaScript高级程序设计总结-DOM&#39;">
+<meta name="twitter:description" content="一.Node类型JavaScript中的所有节点类型都继承自Node类型，因此所有节点类型都共享着相同的基本属性和方法。首先了解一个知识点：  文档节点是每个文档的根节点，在HTML页面中，文档元素始终都是&amp;lt;html&amp;gt;元素  总共有12种节点类型，一下是常见节点属性的总结（剩余的大家可以自己总结） 一、nodeName 属性: 节点的名称，是只读的。 元素节点的 nodeName 与标">
+<meta name="twitter:image" content="http://wx3.sinaimg.cn/mw690/85eda507gy1fj2nkeo37sj20e107e3zt.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/31/重读JavaScript高级程序设计总结-DOM/"/>
+
+
+
+
+
+  <title>'重读JavaScript高级程序设计总结-DOM' | 荣川的个人博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">荣川的个人博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">beliefrc@outlook.com</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/31/重读JavaScript高级程序设计总结-DOM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="荣川">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="荣川的个人博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">'重读JavaScript高级程序设计总结-DOM'</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-31T13:26:02+08:00">
+                2017-08-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="一-Node类型"><a href="#一-Node类型" class="headerlink" title="一.Node类型"></a>一.Node类型</h1><p><strong>JavaScript中的所有节点类型都继承自Node类型，因此所有节点类型都共享着相同的基本属性和方法。</strong><br>首先了解一个知识点：</p>
+<blockquote>
+<p>文档节点是每个文档的根节点，在HTML页面中，文档元素始终都是<code>&lt;html&gt;</code>元素</p>
+</blockquote>
+<p>总共有12种节点类型，一下是常见节点属性的总结（剩余的大家可以自己总结）</p>
+<h3 id="一、nodeName-属性-节点的名称，是只读的。"><a href="#一、nodeName-属性-节点的名称，是只读的。" class="headerlink" title="一、nodeName 属性: 节点的名称，是只读的。"></a>一、nodeName 属性: 节点的名称，是只读的。</h3><ol>
+<li>元素节点的 nodeName 与标签名相同</li>
+<li>属性节点的 nodeName 是属性的名称</li>
+<li>文本节点的 nodeName 永远是 #text</li>
+<li>文档节点的 nodeName 永远是 #document</li>
+</ol>
+<h3 id="二、nodeValue-属性：节点的值"><a href="#二、nodeValue-属性：节点的值" class="headerlink" title="二、nodeValue 属性：节点的值"></a>二、nodeValue 属性：节点的值</h3><ol>
+<li>元素节点的 nodeValue 是 undefined 或 null</li>
+<li>文本节点的 nodeValue 是文本自身</li>
+<li>属性节点的 nodeValue 是属性的值</li>
+</ol>
+<h3 id="三、nodeType-属性-节点的类型，是只读的。以下常用的几种结点类型"><a href="#三、nodeType-属性-节点的类型，是只读的。以下常用的几种结点类型" class="headerlink" title="三、nodeType 属性: 节点的类型，是只读的。以下常用的几种结点类型:"></a>三、nodeType 属性: 节点的类型，是只读的。以下常用的几种结点类型:</h3><table>
+<thead>
+<tr>
+<th>元素类型</th>
+<th>节点类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>元素</td>
+<td>1</td>
+</tr>
+<tr>
+<td>属性</td>
+<td>2</td>
+</tr>
+<tr>
+<td>文本</td>
+<td>3</td>
+</tr>
+<tr>
+<td>注释</td>
+<td>8</td>
+</tr>
+<tr>
+<td>文档</td>
+<td>9</td>
+</tr>
+</tbody>
+</table>
+<h1 id="二-创建节点"><a href="#二-创建节点" class="headerlink" title="二.创建节点"></a>二.创建节点</h1><h3 id="1-createElement"><a href="#1-createElement" class="headerlink" title="1.createElement"></a>1.createElement</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">document</span>.createElement(<span class="string">'tagname'</span>)</div></pre></td></tr></table></figure>
+<p>此方法会创建一个元素节点，tagname为标签名 如p,span,div。仅仅是创建一个节点，<strong>不会被插入到dom中</strong></p>
+<h3 id="2-createTextNode"><a href="#2-createTextNode" class="headerlink" title="2.createTextNode"></a>2.createTextNode</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">document</span>.createTextNode(<span class="string">'str '</span>)</div></pre></td></tr></table></figure>
+<p>此方法会创建一个文本节点，str是文本的内容，如 hello world。仅仅是创建一个节点，<strong>不会被插入到dom中</strong></p>
+<h3 id="2-cloneNode"><a href="#2-cloneNode" class="headerlink" title="2.cloneNode"></a>2.cloneNode</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> newNode=oldNode.cloneNode(bool)</div></pre></td></tr></table></figure>
+<p>此方法会克隆一个节点，接受一个布尔值值作为参数，ture或者false。<br>true代表还会克隆其所有的子节点（包括文本节点）<br>false代表仅仅克隆其本身，不包括子节点<br>该方法会<strong>还会复制该节点的属性</strong>，例如，class，id，title，如果有id属性，记得手动去更改其中一个节点的id<br>仅仅是创建一个节点，<strong>不会被插入到dom中</strong></p>
+<h1 id="三-删除节点"><a href="#三-删除节点" class="headerlink" title="三.删除节点"></a>三.删除节点</h1><h3 id="1-removeChild"><a href="#1-removeChild" class="headerlink" title="1.removeChild"></a>1.removeChild</h3><p>移除节点，返回被移除的节点<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//删除第一个子节点</span></div><div class="line"><span class="keyword">let</span> returnNode=parentNode.removeChild(parentNode.firstChild)</div></pre></td></tr></table></figure></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//删除最后一个子节点</span></div><div class="line"><span class="keyword">let</span> returnNode=parentNode.removeChild(parentNode.lastChild)</div></pre></td></tr></table></figure>
+<h3 id="2-replaceChild"><a href="#2-replaceChild" class="headerlink" title="2.replaceChild"></a>2.replaceChild</h3><p>replaceChild()方法接受的两个参数是：要插入的节点和要替换的节点。要替换的节点将由这个方法返回并从文档树中被移除，同时由<strong>要插入的节点占据其位置</strong>。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//替换第一个子节点</span></div><div class="line"><span class="keyword">let</span> returnNode=parentNode.replaceChild(newNode，parentNode.firstChild)</div></pre></td></tr></table></figure></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//替换最后一个子节点</span></div><div class="line"><span class="keyword">let</span> returnNode=parentNode.replaceChild(newNode，parentNode.lastChild)</div></pre></td></tr></table></figure>
+<h1 id="四-插入节点"><a href="#四-插入节点" class="headerlink" title="四.插入节点"></a>四.插入节点</h1><h3 id="1-appendChild"><a href="#1-appendChild" class="headerlink" title="1.appendChild"></a>1.appendChild</h3><p>用于向childNodes列表的末尾添加一个节点,appendChild()会返回新增的节点<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> returnNode=parentNode.appendChild(newNode)</div><div class="line">returnNode==newNode		<span class="comment">//true</span></div><div class="line">returnNode==parentNode.lastChild		<span class="comment">//true</span></div></pre></td></tr></table></figure></p>
+<p>如果传入到appendChild()中的节点已经是文档的一部分了，那结果就是将该节点从原来的位置<strong>转移</strong>到新位置。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> returnNode=parentNode.appendChild(parentNode.firstNode)</div><div class="line">returnNode==parentNode.firstNode		<span class="comment">//false</span></div><div class="line">returnNode==parentNode.lastChild		<span class="comment">//true</span></div></pre></td></tr></table></figure></p>
+<h3 id="2-insertBefore"><a href="#2-insertBefore" class="headerlink" title="2.insertBefore"></a>2.insertBefore</h3><p>被插入的节点会变成参照节点的<strong>前一个同胞节点</strong>（previousSibling），同时被方法返回。如果参照节点是null，则insertBefore()与appendChild()执行相同的操作<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> returnNode=parentNode.appendChild(newNode,parentNode.firstNode)</div><div class="line">returnNode==parentNode.firstNode		<span class="comment">//ture</span></div></pre></td></tr></table></figure></p>
+<h1 id="五-节点关系"><a href="#五-节点关系" class="headerlink" title="五.节点关系"></a>五.节点关系</h1><blockquote>
+<p>每个节点都有一个childNodes属性，其中保存着一个NodeList对象。<strong>NodeList是一种类数组对象</strong>，用于保存一组有序的节点，可以通过位置来访问这些节点。请注意，虽然可以通过方括号语法来访问NodeList的值，而且这个对象也有length属性，但它并不是Array的实例。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">childNodes 		<span class="comment">//所有子节点</span></div><div class="line">parentNode		<span class="comment">//父节点</span></div><div class="line">parentElement		<span class="comment">//与parentNode的区别在于，其父节点必须是一个元素节点，如果不是，则返回null</span></div><div class="line">firstChild		<span class="comment">//第一个子节点</span></div><div class="line">lastChild		<span class="comment">//最后一个子节点</span></div><div class="line">previousSibling		<span class="comment">//前一个兄弟节点</span></div><div class="line">previousElementSibling		<span class="comment">//与previousSibling的区别在于，其前一个节点必须是一个元素节点，如果不是，则返回null</span></div><div class="line">nextSibling		<span class="comment">//后一个兄弟节点</span></div><div class="line">nextElementSibling		<span class="comment">//与nextSibling的区别在于，其后一个节点必须是一个元素节点，如果不是，则返回null</span></div><div class="line">hasChildNodes()		<span class="comment">//在节点包含一或多个子节点的情况下返回true</span></div><div class="line">ownerDocument 		<span class="comment">//属性指向表示整个文档的文档节点</span></div></pre></td></tr></table></figure>
+<p>列表中第一个节点的previousSibling属性值为null，而列表中最后一个节点的nextSibling属性的值同样也为null，如果列表中只有一个节点，那么该节点的nextSibling和previousSibling都为null。</p>
+<p><a href="http://wx3.sinaimg.cn/mw690/85eda507gy1fj2nkeo37sj20e107e3zt.jpg" title="关系图" target="_blank" rel="external"><img src="http://wx3.sinaimg.cn/mw690/85eda507gy1fj2nkeo37sj20e107e3zt.jpg" alt="关系图" title="关系图"></a></p>
+<h1 id="六-元素属性"><a href="#六-元素属性" class="headerlink" title="六.元素属性"></a>六.元素属性</h1><h3 id="1-setAttribute"><a href="#1-setAttribute" class="headerlink" title="1.setAttribute()"></a>1.setAttribute()</h3><p>这个方法接受两个参数：要设置的特性名和值。如果特性已经存在，setAttribute()会以指定的值替换现有的值；如果特性不存在，setAttribute()则创建该属性并设置相应的值。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">someNode.setAttribute(<span class="string">'id'</span>,<span class="string">'value'</span>)</div><div class="line">someNode.setAttribute(<span class="string">'class'</span>,<span class="string">'value'</span>)</div></pre></td></tr></table></figure></p>
+<p>也可以这样直接设置属性<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">someNode.id=<span class="string">'value'</span></div><div class="line">someNode.class=<span class="string">'value'</span></div><div class="line"><span class="comment">//不可以设置自定义属性</span></div></pre></td></tr></table></figure></p>
+<h3 id="2-getAttribute"><a href="#2-getAttribute" class="headerlink" title="2.getAttribute()"></a>2.getAttribute()</h3><p>getAttribute()的特性名与实际的特性名相同,如果给定名称的特性不存在，getAttribute()返回null。getAttribute()方法也可以取得自定义特性<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">someNode.getAttribute(<span class="string">"id"</span>)</div><div class="line">someNode.getAttribute(<span class="string">"class"</span>)</div><div class="line">someNode.getAttribute(<span class="string">"title"</span>)</div></pre></td></tr></table></figure></p>
+<h3 id="3-removeAttribute"><a href="#3-removeAttribute" class="headerlink" title="3.removeAttribute()"></a>3.removeAttribute()</h3><p>这个方法用于彻底删除元素的特性。调用这个方法不仅会清除特性的值，而且也会从元素中完全删除特性，ie6前不支持。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">someNode.removeAttribute(<span class="string">"id"</span>)</div></pre></td></tr></table></figure></p>
+<h3 id="4-attributes属性"><a href="#4-attributes属性" class="headerlink" title="4.attributes属性"></a>4.attributes属性</h3><p>这个方法不常用，它返回的是一个包含该节点所有属性的类数组对象</p>
+<h1 id="七-获取节点"><a href="#七-获取节点" class="headerlink" title="七.获取节点"></a>七.获取节点</h1><p>这个是最基础的就不再赘述<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">document</span>.getElementById()</div><div class="line"><span class="built_in">document</span>.getElementsByClassName()		<span class="comment">//返回HTMLCollection对象（类数组对象）</span></div><div class="line"><span class="built_in">document</span>.getElementsByTagName()		<span class="comment">//返回HTMLCollection对象（类数组对象）</span></div><div class="line"><span class="built_in">document</span>.getElementsByName()		<span class="comment">//返回HTMLCollection对象（类数组对象）</span></div><div class="line">querySelector()		<span class="comment">//方法接收一个CSS选择符</span></div><div class="line">querySelectorAll()		<span class="comment">//接收的参数与querySelector()方法一样，都是一个CSS选择符，但返回的是所有匹配的元素而不仅仅是一个元素。这个方法返回的是一个NodeList的实例。</span></div></pre></td></tr></table></figure></p>
+<h1 id="八-document对象的特殊集合"><a href="#八-document对象的特殊集合" class="headerlink" title="八.document对象的特殊集合"></a>八.document对象的特殊集合</h1><blockquote>
+<ul>
+<li>　document.anchors，包含文档中所有带name特性的<code>&lt;a&gt;</code>元素；</li>
+<li>　document.forms，包含文档中所有的<code>&lt;form&gt;</code>元素，与 document.getElementsByTagName（”form”）得到的结果相同；</li>
+<li>　document.images，包含文档中所有的<code>&lt;img&gt;</code>元素，与document.getElementsByTagName（”img”）得到的结果相同；</li>
+<li>　document.links，包含文档中所有带href特性的<code>&lt;a&gt;</code>元素。<br><del>- 　document.applets，包含文档中所有的<code>&lt;applet&gt;</code>元素，因为不再推荐使用<code>&lt;applet&gt;</code>元素，所以这个集合已经不建议使用了</del>；</li>
+</ul>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript-DOM/" rel="tag"># JavaScript DOM</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/14/重读JavaScript高级程序设计总结-Function类型/" rel="next" title="重读JavaScript高级程序设计总结-Function类型">
+                <i class="fa fa-chevron-left"></i> 重读JavaScript高级程序设计总结-Function类型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="荣川" />
+          <p class="site-author-name" itemprop="name">荣川</p>
+           
+              <p class="site-description motion-element" itemprop="description">这是我的第一个博客 测试中</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一-Node类型"><span class="nav-number">1.</span> <span class="nav-text">一.Node类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、nodeName-属性-节点的名称，是只读的。"><span class="nav-number">1.0.1.</span> <span class="nav-text">一、nodeName 属性: 节点的名称，是只读的。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、nodeValue-属性：节点的值"><span class="nav-number">1.0.2.</span> <span class="nav-text">二、nodeValue 属性：节点的值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、nodeType-属性-节点的类型，是只读的。以下常用的几种结点类型"><span class="nav-number">1.0.3.</span> <span class="nav-text">三、nodeType 属性: 节点的类型，是只读的。以下常用的几种结点类型:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二-创建节点"><span class="nav-number">2.</span> <span class="nav-text">二.创建节点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-createElement"><span class="nav-number">2.0.1.</span> <span class="nav-text">1.createElement</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-createTextNode"><span class="nav-number">2.0.2.</span> <span class="nav-text">2.createTextNode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-cloneNode"><span class="nav-number">2.0.3.</span> <span class="nav-text">2.cloneNode</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三-删除节点"><span class="nav-number">3.</span> <span class="nav-text">三.删除节点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-removeChild"><span class="nav-number">3.0.1.</span> <span class="nav-text">1.removeChild</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-replaceChild"><span class="nav-number">3.0.2.</span> <span class="nav-text">2.replaceChild</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四-插入节点"><span class="nav-number">4.</span> <span class="nav-text">四.插入节点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-appendChild"><span class="nav-number">4.0.1.</span> <span class="nav-text">1.appendChild</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-insertBefore"><span class="nav-number">4.0.2.</span> <span class="nav-text">2.insertBefore</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五-节点关系"><span class="nav-number">5.</span> <span class="nav-text">五.节点关系</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#六-元素属性"><span class="nav-number">6.</span> <span class="nav-text">六.元素属性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-setAttribute"><span class="nav-number">6.0.1.</span> <span class="nav-text">1.setAttribute()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-getAttribute"><span class="nav-number">6.0.2.</span> <span class="nav-text">2.getAttribute()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-removeAttribute"><span class="nav-number">6.0.3.</span> <span class="nav-text">3.removeAttribute()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-attributes属性"><span class="nav-number">6.0.4.</span> <span class="nav-text">4.attributes属性</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#七-获取节点"><span class="nav-number">7.</span> <span class="nav-text">七.获取节点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#八-document对象的特殊集合"><span class="nav-number">8.</span> <span class="nav-text">八.document对象的特殊集合</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">荣川</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
