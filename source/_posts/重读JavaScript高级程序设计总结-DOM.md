@@ -1,7 +1,9 @@
 ---
 title: '''重读JavaScript高级程序设计总结-DOM'''
 date: 2017-08-31 13:26:02
-tags: JavaScript DOM
+tags:
+- DOM
+- JavaScript
 ---
 
 # 一.Node类型
