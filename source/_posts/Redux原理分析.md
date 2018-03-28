@@ -40,7 +40,7 @@ function reducer(state = {money: 0}, action) {
     //返回一个新的state可以使用es6提供的Object.assign()方法，或扩展运算符（此方法需要babel-preset-state-3支持）
     switch (action.type) {
         case '+':
-            return Object.assign(state, {money: state.money + 1});
+            return Object.assign({}, state, {money: state.money + 1});
         case '-':
             return {...state, ...{money: state.money - 1}};
         default:
@@ -72,7 +72,7 @@ function reducer(state = {money: 0}, action) {
     //返回一个新的state可以使用es6提供的Object.assign()方法，或扩展运算符（此方法需要babel-preset-state-3支持）
     switch (action.type) {
         case '+':
-            return Object.assign(state, {money: state.money + 1});
+            return Object.assign({}, state, {money: state.money + 1});
         case '-':
             return {...state, ...{money: state.money - 1}};
         default:
@@ -133,7 +133,7 @@ function reducer(state = {money: 0}, action) {
     //返回一个新的state可以使用es6提供的Object.assign()方法，或扩展运算符（此方法需要babel-preset-state-3支持）
     switch (action.type) {
         case ADD:
-            return Object.assign(state, {money: state.money + 1});
+            return Object.assign({}, state, {money: state.money + 1});
         case SUBTRACTION:
             return {...state, ...{money: state.money - 1}};
         default:
@@ -189,6 +189,238 @@ const reducerFamily=combineReducers({
 })
 const store = createStore(reducerFamily);
 ```
+
+## 二.在React中使用redux
+如果会react，那么也一定知道creact-react-app这个官方脚手架工具，首先使用creact-react-app创建一个项目，然后删除src目录下所有文件，接下来就可以愉快的敲代码了。
+
+在src下创建三个文件
+**index.js**
+```JavaScript
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {createStore} from 'redux'
+//引入我们的reducer和action创建函数
+import {reducer, add, subtraction} from './index.redux'
+import App from './App'
+
+//创建store
+const store = createStore(reducer);
+
+//store.subscribe方法接受的参数是一个函数，
+// 所以将ReactDOM.render方法写在一个函数内
+function listen() {
+    //将store，action创建函数分别以属性的方式传递给子组件App
+    ReactDOM.render(<App store={store} add={add} subtraction={subtraction}/>,
+        document.querySelector('#root'));
+}
+
+//因为刚进入页面没有dispatch操作改变store，
+// 所以listen不会执行，我们需要手动调用一次
+listen();
+
+//重点，改变了store，页面就会重新渲染，
+// 可以试试不写这行代码会是怎样的效果
+store.subscribe(listen);
+```
+
+**App.js**
+```JavaScript
+import React from 'react'
+
+export default class App extends React.Component {
+    render() {
+        //从属性中获取store，action创建函数
+        const {store, add, subtraction} = this.props;
+        //获取state
+        let state = store.getState();
+        return <div>
+            <h1>我有{state.money}元</h1>
+
+            {/*通过store.dispatch方法改变store，从而页面也会改变*/}
+            <button onClick={() => {store.dispatch(add())}}>
+                捡了一块钱
+            </button>
+
+            <button onClick={() => {store.dispatch(subtraction())}}>
+                掉了一块钱
+            </button>
+        </div>
+    }
+}
+```
+**index.redux.js**
+```JavaScript
+//定义常量方便维护
+const ADD = '+', SUBTRACTION = '-';
+
+//给初始状态一个默认值：{money: 0}
+export function reducer(state = {money: 0}, action) {
+    //返回一个新的state可以使用es6提供的Object.assign()方法，或扩展运算符（此方法需要babel-preset-state-3支持）
+    switch (action.type) {
+        case ADD:
+            return Object.assign({}, state, {money: state.money + 1});
+        case SUBTRACTION:
+            return {...state, ...{money: state.money - 1}};
+        default:
+            return state;
+    }
+}
+
+//action创建函数，返回了一个action
+export function add() {
+    return {type: ADD}
+}
+
+export function subtraction() {
+    return {type: SUBTRACTION}
+}
+
+```
+效果图
+[![效果图](http://wx4.sinaimg.cn/mw690/85eda507gy1fplbvikkn8g20bc06qdgy.gif "效果图")](http://wx4.sinaimg.cn/mw690/85eda507gy1fplbvikkn8g20bc06qdgy.gif "效果图")
+
+这样我们就将redux和react结合了起来但是这样我们可能会觉得麻烦，因为我们要将store和action创建函数传给子组件，当我们的action比较多时，子组件比较多时，就需要将store和大量的action创建函数一层层的多次传递下去。这样就会十分麻烦，因此我们就可以使用`react-redux`这个库来帮助我们实现这个麻烦的过程
+
+## 三.react-redux的使用
+### 1.Provider
+`react-redux`给我们提供了一个`Provider`组件，我们可以把这个组件写在最外层，这样被`Provider`包裹的所有组件都可以通过`props`来获取`state`，无论组个组件藏得多么深。
+而`Provider`组件只接受一个属性，那就是`store`
+
+那么我们index.js的代码就变成下面这样了：
+```javascript
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {createStore} from 'redux'
+import {Provider} from 'react-redux'
+import {reducer} from './index.redux'
+import App from './App'
+
+//创建store
+const store = createStore(reducer);
+
+ReactDOM.render(
+    <Provider store={store}>
+        <App/>
+    </Provider>,
+    document.querySelector('#root'));
+```
+### 2.connect
+当然，只有`Provider`组件是不够的，我们还需要`connect`来帮助我们获取state和action，没错，**`connect`就是帮助我们获取state和action的**
+
+那么问题就来了，我们的组件可不是需要项目中所有的state和action，只需要其中的一部分就可以了，所以`connect`会接受两个参数，**第一个参数它可以帮我们筛选state，第二个参数可以帮我们筛选action。**
+我们可以把这两个参数写成函数的形式，
+参数1，
+```javascript
+function mapStateToProps(state) {
+    return {
+        money: state.money
+    }
+}
+```
+参数2，
+```javascript
+function actionCreators() {
+    return {
+        subtraction,
+        add
+    }
+}
+```
+我们可以发现这两个函数都是返回了一个对象，第一个函数返回了我们需要的state，第二个函数返回了我们需要的action创建函数
+
+那么app.js 的代码就变成这样了：
+```javascript
+import React from 'react'
+import {connect} from 'react-redux'
+import {add, subtraction} from './index.redux'
+
+class App extends React.Component {
+    render() {
+        //因为connect的原因，state和action我们已经可以从属性中获取了
+        const {money, add, subtraction} = this.props;
+
+        return <div>
+            <h1>我有{money}元</h1>
+
+            {/*这个时候不需要我们dispatch了*/}
+            <button onClick={add}>
+                捡了一块钱
+            </button>
+
+            <button onClick={subtraction}>
+                掉了一块钱
+            </button>
+        </div>
+    }
+}
+
+//connect所需要的参数
+//函数返回的我们需要的状态，我们需要money，就从state中取出money
+//假如我们还需要house，就增加一个house:state.house
+function mapStateToProps(state) {
+    return {
+        money: state.money
+    }
+}
+
+//connect需要的第二参数
+//返回我们需要的action创建函数
+function actionCreators() {
+    return {
+        subtraction,
+        add
+    }
+}
+
+//上面两个函数返回的都是对象
+
+//通过connect将state和action创建函数当做属性传递给组件
+export default App = connect(mapStateToProps, actionCreators())(App);
+
+```
+
+如果熟悉es6装饰器的语法那就更好了，可以使我们的代码变得更优雅
+app.js
+```javascript
+import React from 'react'
+import {connect} from 'react-redux'
+import {add, subtraction} from './index.redux'
+
+@connect(
+    state => ({money: state.money}),
+    {
+        subtraction,
+        add
+    })
+export default class App extends React.Component {
+    render() {
+        //因为connect的原因，state和action我们已经可以从属性中获取了
+        const {money, add, subtraction} = this.props;
+
+        return <div>
+            <h1>我有{money}元</h1>
+
+            {/*这个时候不需要我们dispatch了*/}
+            <button onClick={add}>
+                捡了一块钱
+            </button>
+
+            <button onClick={subtraction}>
+                掉了一块钱
+            </button>
+        </div>
+    }
+}
+```
+**看到这里再回头看看最开始图片，就能搞清楚redux的工作流程究竟是怎样的。**
+
+
+
+
+
+
+
+
 
 
 
