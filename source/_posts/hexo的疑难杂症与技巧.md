@@ -10,14 +10,14 @@ tags: hexo
 今天手欠捯饬了下博客，结果就出现各种莫名奇妙的问题，无奈之下**删掉所有文件**重新发布一边！现在特意总结一下
 
 ## 一.命令报错和警告
-###1. Deployer not found: git
+### 1. Deployer not found: git
 输入 hexo d后报错
 --deployer not found: git
 **解决办法**：npm install hexo-deployer-git –save
 **分析**：HEXO更新到3.0之后，deploy的type 的github需要改成git
 同时需要安装一个依赖支持此命令
 
-###2.The file will have its original line endings in your working directory.
+### 2.The file will have its original line endings in your working directory.
 输入 hexo d后警告
 --warning: LF will be replaced by CRLF in tags/生活/index.html.
 The file will have its original line endings in your working directory.
